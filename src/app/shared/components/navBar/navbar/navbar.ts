@@ -31,7 +31,7 @@ export class Navbar {
     filter((event) => event instanceof NavigationEnd),
     tap((event) => console.log(event)),
     map((event) => event.url),
-    map(url => routes.find(route => `/${route.path}` === url )?.title ?? "No hay cambios")
+    map(url => routes.find(route => `/${route.path}` === url )?.title ?? "Mapas")
   );
 
 
