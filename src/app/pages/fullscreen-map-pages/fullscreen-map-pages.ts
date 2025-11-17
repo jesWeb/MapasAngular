@@ -2,12 +2,12 @@ import { AfterViewInit, Component, effect, ElementRef, signal, viewChild } from 
 
 import mapboxgl from 'mapbox-gl';
 import { environment } from '../../../environments/environment';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, JsonPipe } from '@angular/common';
 
 mapboxgl.accessToken = environment.mapboxKey;
 @Component({
   selector: 'app-fullscreen-map-pages',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, JsonPipe],
   templateUrl: './fullscreen-map-pages.html',
   styles: `
     div {
@@ -35,6 +35,11 @@ export class FullscreenMapPages implements AfterViewInit {
 
   //zoom
   Zoom = signal(14)
+  cordenadas = signal({
+    lng: -74.5,
+    lat: 40
+  })
+
 
   //efect
   ZoomEffect = effect(() => {
@@ -44,8 +49,6 @@ export class FullscreenMapPages implements AfterViewInit {
     }
 
     this.map()?.setZoom(this.Zoom())
-
-
   })
 
 
@@ -58,26 +61,43 @@ export class FullscreenMapPages implements AfterViewInit {
 
     const element = this.divElement()!.nativeElement;
     console.log(element);
-
+    const { lng, lat } = this.cordenadas()
 
     const map = new mapboxgl.Map({
       container: element, // container ID
       style: 'mapbox://styles/mapbox/streets-v12', // style URL
-      center: [-74.5, 40], // starting position [lng, lat]
+      center: [lng, lat], // starting position [lng, lat]
       zoom: this.Zoom(), // starting zoom
     });
 
-      this.mapListeners(map)
+    this.mapListeners(map)
 
   }
 
+  //metodo de listeners para mabox
   mapListeners(map: mapboxgl.Map) {
+    //zoom
     map.on('zoomend', (event) => {
       const newZoom = event.target.getZoom();
       this.Zoom.set(newZoom)
     })
+    //punto central
+    map.on('moveend', () => {
+      const center = map.getCenter();
+      // console.log(center);
+
+      this.cordenadas.set(center)
+    })
+
+    //controles de mapbox
+    map.addControl(new mapboxgl.FullscreenControl());
+    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(new mapboxgl.ScaleControl());
 
     this.map.set(map)
+
+
+
 
   }
 
