@@ -3,12 +3,30 @@
 <section class="fixed w-[250px] bg-white rounded top-20 left-20 p-5">
   <h2 class="text-xl font-bold text-black mb-2">Marcadores</h2>
   <div class="flex flex-col gap-2">
-    <input
-      type="radio"
-      name="radio-12"
-      checked="checked"
-      class="radio bg-red-100 border-red-300 checked:bg-red-200 checked:text-red-600 checked:border-red-600"
-    />
+    @for (marker of markers(); track marker.id) {
 
+    <div class="form-control"
+    (click)=" navegacionMarcador(marker.mapboxMarker.getLngLat())"
+    >
+      <label for="" class="label cursor-pointer"></label>
+      <span class="label-text text-danger">{{
+        marker.mapboxMarker.getLngLat() | json
+      }}</span>
+      <input
+        type="radio"
+        name="radio-12"
+        checked="checked"
+        class="radio"
+        [style]="{ backdroundColor: marker.mapboxMarker._color }"
+      />
+    </div>
+
+    }@empty {
+
+    <div class="flex justify-center items-center bg-blue-200 rounded py-5">
+      <p class="text-xs text-secondary">No hay Marcadores</p>
+    </div>
+
+    }
   </div>
 </section>
