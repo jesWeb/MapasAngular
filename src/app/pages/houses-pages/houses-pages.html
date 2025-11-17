@@ -1,1 +1,36 @@
-<p>houses-pages works!</p>,
+<div class="container mx-auto px-3 py-2">
+  <section class="mt-2 mb-3">
+    <h2 class="text-3xl font-bold mb-2">Casas</h2>
+
+    <h3 class="text-xl text-gray-500 mb-2">{{ 3 }} casas disponibles</h3>
+  </section>
+
+  <section
+    class="mt-2 px-3 py-2 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2"
+  >
+    @for (casa of houses(); track casa.id; let i = $index ) {
+
+    <!-- card -->
+    <div class="card bg-base-100  shadow-sm rounded-top-3 overflow-hidden">
+      <app-mini-map [lnlagt]="casa.lngLat" [zoom]="15" />
+      <div class="card-body">
+        <h2 class="card-title">
+          {{ casa.name }}
+          @if(i == 1){
+          <div class="badge badge-secondary">Nueva</div>
+          }
+        </h2>
+        <p>
+          {{ casa.description }}
+        </p>
+        <div class="card-actions justify-end">
+          @for (tag of casa.tags ; track $index) {
+          <div class="badge badge-outline badge-accent">{{ tag }}</div>
+          }
+        </div>
+      </div>
+    </div>
+
+    }
+  </section>
+</div>
