@@ -101,6 +101,17 @@ export class MarkersPages implements AfterViewInit {
     })
   }
 
+  deleteMarcador(marker: Marcador) {
+    if (!this.map()) return;
+    const map = this.map()!;
+
+    marker.mapboxMarker.remove();
+
+    this.markers.set(this.markers().filter((m) => m.id !== marker.id))
+
+
+  }
+
 
 
 
